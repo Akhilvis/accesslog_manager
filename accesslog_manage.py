@@ -25,6 +25,5 @@ def upload_file(file_name, bucket, object_name=None):
         return False
     return True
 
-F = open('','rw')
-
-upload_file()
+with open('/home/akhilvis/Downloads/signals.txt','rb') as F:
+    upload_file(F, 'wurrly-videos-bucket')
