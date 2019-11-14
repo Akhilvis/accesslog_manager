@@ -1,5 +1,6 @@
 import boto3
 import os, time
+import datetime
 
 # Let's use Amazon S3
 s3 = boto3.resource('s3')
@@ -13,8 +14,9 @@ class AccesslogManager:
         self.delete_before_days = 7
 
     def s3_upload(self, file_path):
-        data = open('test.jpg', 'rb')
-        s3.Bucket(file_path).put_object(Key='test.jpg', Body=data)
+        data = open(file_path, 'rb')
+        datetime_str = str(datetime.datetime.now())
+        s3.Bucket(self.bucketname).put_object(Key='accesslog_' + datetime_str, Body=data)
 
     def delete_old_files(self):
         now = time.time()
@@ -29,6 +31,7 @@ class AccesslogManager:
                 # Delete log file
                 if os.path.isfile(f):
                     os.remove(os.path.join(self.log_directory, f))
+
 
 accesslog = AccesslogManager()
 accesslog.delete_old_files()
