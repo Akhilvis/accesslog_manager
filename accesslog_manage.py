@@ -40,5 +40,3 @@ accesslog = AccesslogManager()
 accesslog.delete_old_files()
 # chron tab task daily
 #  * 12 * * *  accesslog_manage.py
-
-
