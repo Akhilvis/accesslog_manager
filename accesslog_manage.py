@@ -9,14 +9,14 @@ s3 = boto3.resource('s3')
 class AccesslogManager:
 
     def __init__(self):
-        self.bucketname = 'bucket name'
+        self.bucket_name = 'bucket name'
         self.log_directory = "/home/akhil/Documents/accesstest"
         self.delete_before_days = 7
 
     def s3_upload(self, file_path):
         data = open(file_path, 'rb')
         datetime_str = str(datetime.datetime.now())
-        s3.Bucket(self.bucketname).put_object(Key='accesslog_' + datetime_str, Body=data)
+        s3.Bucket(self.bucket_name).put_object(Key='accesslog_' + datetime_str, Body=data)
 
     def delete_old_files(self):
         now = time.time()
