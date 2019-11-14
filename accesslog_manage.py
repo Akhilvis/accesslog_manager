@@ -1,29 +1,26 @@
-import logging
 import boto3
-from botocore.exceptions import ClientError
+import os, time, sys
+
+# Let's use Amazon S3
+s3 = boto3.resource('s3')
+
+class AccesslogManager:
+
+    def __index__(self):
+        self.bucketname = ''
+        self.log_directory = r"c:\users\%myusername%\downloads"
+        self.delete_before_days = 7
 
 
-def upload_file(file_name, bucket, object_name=None):
-    """Upload a file to an S3 bucket
+    def s3_upload(self, file_path):
+        data = open('test.jpg', 'rb')
+        s3.Bucket(file_path).put_object(Key='test.jpg', Body=data)
 
-    :param file_name: File to upload
-    :param bucket: Bucket to upload to
-    :param object_name: S3 object name. If not specified then file_name is used
-    :return: True if file was uploaded, else False
-    """
+    def delete_old_files(self):
+        now = time.time()
 
-    # If S3 object_name was not specified, use file_name
-    if object_name is None:
-        object_name = file_name
-
-    # Upload the file
-    s3_client = boto3.client('s3')
-    try:
-        response = s3_client.upload_file(file_name, bucket, object_name)
-    except ClientError as e:
-        logging.error(e)
-        return False
-    return True
-
-with open('/home/akhilvis/Downloads/signals.txt','rb') as F:
-    upload_file(F, 'wurrly-videos-bucket')
+        for f in os.listdir(self.log_directory):
+            f = os.path.join(self.log_directory, f)
+            if os.stat(f).st_mtime < now - self.delete_before_days * 86400:
+                if os.path.isfile(f):
+                    os.remove(os.path.join(self.log_directory, f))
