@@ -7,7 +7,7 @@ s3 = boto3.resource('s3')
 
 class AccesslogManager:
 
-    def __index__(self):
+    def __init__(self):
         self.bucketname = ''
         self.log_directory = "/home/akhil/Documents/accesstest"
         self.delete_before_days = 7
@@ -21,7 +21,14 @@ class AccesslogManager:
 
         for f in os.listdir(self.log_directory):
             f = os.path.join(self.log_directory, f)
-            print('file full path.....', f)
             if os.stat(f).st_mtime < now - self.delete_before_days * 86400:
+
+                # Upload to s3 bucket
+                self.s3_upload(f)
+
+                # Delete log file
                 if os.path.isfile(f):
                     os.remove(os.path.join(self.log_directory, f))
+
+accesslog = AccesslogManager()
+accesslog.delete_old_files()
