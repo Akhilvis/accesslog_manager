@@ -8,7 +8,7 @@ s3 = boto3.resource('s3')
 class AccesslogManager:
 
     def __init__(self):
-        self.bucketname = ''
+        self.bucketname = 'bucket name'
         self.log_directory = "/home/akhil/Documents/accesstest"
         self.delete_before_days = 7
 
