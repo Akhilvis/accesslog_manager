@@ -14,7 +14,7 @@ class AccesslogManager:
     def __init__(self):
         self.bucket_name = 'bucket name'
         self.log_directory = "/home/akhil/Documents/accesstest"
-        self.delete_before_days = 7
+        self.delete_before_days = 7  # days
 
     def s3_upload(self, file_path):
         data = open(file_path, 'rb')
